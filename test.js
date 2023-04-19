@@ -1,12 +1,12 @@
 const img = [
-  { id: 0, src: 'https://picsum.photos/700/500?random=1' },
-  { id: 1, src: 'https://picsum.photos/700/500?random=2' },
-  { id: 2, src: 'https://picsum.photos/700/500?random=3' },
-  { id: 3, src: 'https://picsum.photos/700/500?random=4' },
-  { id: 4, src: 'https://picsum.photos/700/500?random=5' },
-  { id: 5, src: 'https://picsum.photos/700/500?random=6' },
-  { id: 6, src: 'https://picsum.photos/700/500?random=7' },
-  { id: 7, src: 'https://picsum.photos/700/500?random=8' },
+  { id: 0, src: 'img/img1.webp' },
+  { id: 1, src: 'img/img2.webp' },
+  { id: 2, src: 'img/img3.webp' },
+  { id: 3, src: 'img/img4.webp' },
+  { id: 4, src: 'img/img5.webp' },
+  { id: 5, src: 'img/img6.webp' },
+  { id: 6, src: 'img/img7.webp' },
+  { id: 7, src: 'img/img8.webp' },
 ];
 
 const slider = document.querySelector('#slider');
