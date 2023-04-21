@@ -1,4 +1,4 @@
-const img = [
+const imagesArray = [
   { id: 0, src: 'https://picsum.photos/700/500?random=1' },
   { id: 1, src: 'https://picsum.photos/700/500?random=2' },
   { id: 2, src: 'https://picsum.photos/700/500?random=3' },
@@ -9,140 +9,114 @@ const img = [
   { id: 7, src: 'https://picsum.photos/700/500?random=8' },
 ];
 
-const slider = document.querySelector('#slider');
-const controls = document.querySelector('#controls');
-const buttonNext = controls.querySelector('#buttonNext');
-const buttonPrev = controls.querySelector('#buttonPrev');
-const thumbnails = document.querySelector('#thumbnails');
+addSlider(imagesArray, '#slider', 5);
 
-const mainImg = document.createElement('img');
-mainImg.src = img[0].src;
-mainImg.dataset.index = img[0].id;
-slider.appendChild(mainImg);
+function addSlider(imgArr, sliderId, thumbnailsCount) {
+  const sliderContainer = document.querySelector(sliderId);
+  const slider = sliderContainer.querySelector('#slider-main');
+  const controls = sliderContainer.querySelector('#controls');
+  const buttonNext = controls.querySelector('#buttonNext');
+  const buttonPrev = controls.querySelector('#buttonPrev');
+  const thumbnails = sliderContainer.querySelector('#thumbnails');
 
-preloadImages();
-addThumbnails();
+  const mainImg = document.createElement('img');
+  mainImg.classList.add('main-img');
+  mainImg.src = imgArr[0].src;
+  mainImg.dataset.index = imgArr[0].id;
+  slider.appendChild(mainImg);
 
-buttonNext.addEventListener('click', () => {
-  const currentIndex = parseInt(mainImg.dataset.index);
-
-  if (currentIndex + 1 > img.length - 1) {
-    mainImg.src = img[0].src;
-    mainImg.dataset.index = img[0].id;
-  }
-  if (currentIndex + 1 <= img.length - 1) {
-    mainImg.src = img[currentIndex + 1].src;
-    mainImg.dataset.index = img[currentIndex + 1].id;
-  }
-
-  removeThumbnails();
   addThumbnails();
-})
 
-buttonPrev.addEventListener('click', () => {
-  const currentIndex = parseInt(mainImg.dataset.index);
+  thumbnails.addEventListener('click', (e) => {
+    mainImg.src = imgArr[e.target.dataset.index].src;
+    mainImg.dataset.index = e.target.dataset.index;
 
-  if (currentIndex - 1 < 0) {
-    mainImg.src = img[img.length - 1].src;
-    mainImg.dataset.index = img[img.length - 1].id;
-  }
+    addThumbnails();
+  });
 
-  if (currentIndex - 1 >= 0) {
-    mainImg.src = img[currentIndex - 1].src;
-    mainImg.dataset.index = img[currentIndex - 1].id;
-  }
+  buttonNext.addEventListener('click', () => {
+    const currentIndex = parseInt(mainImg.dataset.index);
 
-  removeThumbnails();
-  addThumbnails();
-})
-
-document.addEventListener('keydown', e => {
-  const currentIndex = parseInt(mainImg.dataset.index);
-
-  if (e.key === 'ArrowRight') {
-    if (currentIndex + 1 > img.length - 1) {
-      mainImg.src = img[0].src;
-      mainImg.dataset.index = img[0].id;
+    if (currentIndex + 1 > imgArr.length - 1) {
+      mainImg.src = imgArr[0].src;
+      mainImg.dataset.index = imgArr[0].id;
+    } else {
+      mainImg.src = imgArr[currentIndex + 1].src;
+      mainImg.dataset.index = imgArr[currentIndex + 1].id;
     }
-    if (currentIndex + 1 <= img.length - 1) {
-      mainImg.src = img[currentIndex + 1].src;
-      mainImg.dataset.index = img[currentIndex + 1].id;
-    }
-  }
 
-  if (e.key === 'ArrowLeft') {
+    addThumbnails();
+  })
+
+  buttonPrev.addEventListener('click', () => {
+    const currentIndex = parseInt(mainImg.dataset.index);
+
     if (currentIndex - 1 < 0) {
-      mainImg.src = img[img.length - 1].src;
-      mainImg.dataset.index = img[img.length - 1].id;
+      mainImg.src = imgArr[imgArr.length - 1].src;
+      mainImg.dataset.index = imgArr[imgArr.length - 1].id;
+    } else {
+      mainImg.src = imgArr[currentIndex - 1].src;
+      mainImg.dataset.index = imgArr[currentIndex - 1].id;
     }
 
-    if (currentIndex - 1 >= 0) {
-      mainImg.src = img[currentIndex - 1].src;
-      mainImg.dataset.index = img[currentIndex - 1].id;
+    addThumbnails();
+  })
+
+  document.addEventListener('keydown', e => {
+    const currentIndex = parseInt(mainImg.dataset.index);
+
+    if (e.key === 'ArrowRight') {
+      if (currentIndex + 1 > imgArr.length - 1) {
+        mainImg.src = imgArr[0].src;
+        mainImg.dataset.index = imgArr[0].id;
+      } else {
+        mainImg.src = imgArr[currentIndex + 1].src;
+        mainImg.dataset.index = imgArr[currentIndex + 1].id;
+      }
     }
-  }
 
-  removeThumbnails();
-  addThumbnails();
-});
+    if (e.key === 'ArrowLeft') {
+      if (currentIndex - 1 < 0) {
+        mainImg.src = imgArr[imgArr.length - 1].src;
+        mainImg.dataset.index = imgArr[imgArr.length - 1].id;
+      } else {
+        mainImg.src = imgArr[currentIndex - 1].src;
+        mainImg.dataset.index = imgArr[currentIndex - 1].id;
+      }
+    }
 
+    addThumbnails();
+  });
 
-function addThumbnails() {
-  const staringIndex = parseInt(mainImg.dataset.index);
-  img.forEach((e, index) => {
-    if (index >= staringIndex && index <= staringIndex + 4) {
+  function addThumbnails() {
+    Array.from(thumbnails.children).forEach((e) => {
+      e.remove();
+    })
+
+    const staringIndex = parseInt(mainImg.dataset.index);
+
+    const newThumbnailsArr = imgArr.slice(staringIndex, staringIndex + thumbnailsCount);
+    let restThumbnailsArr = [];
+
+    if (newThumbnailsArr.length < thumbnailsCount) {
+      restThumbnailsArr = imgArr.slice(0, thumbnailsCount - newThumbnailsArr.length);
+    }
+
+    const finalThumbnails = [...newThumbnailsArr, ...restThumbnailsArr];
+
+    finalThumbnails.forEach((e, index) => {
       const thumbnailsImg = document.createElement('img');
 
-      if (index === staringIndex) {
+      if (index === 0) {
         thumbnailsImg.classList.add('thumbnail-active');
       }
 
-      thumbnailsImg.src = img[index].src;
-      thumbnailsImg.dataset.index = img[index].id;
+      thumbnailsImg.classList.add('thumbnail-image');
+      thumbnailsImg.src = finalThumbnails[index].src;
+      thumbnailsImg.dataset.index = finalThumbnails[index].id;
       thumbnails.appendChild(thumbnailsImg);
-
-      if (index === img.length - 1) {
-        const newThumbnailsCount = 5 - Array.from(thumbnails.children).length;
-
-        img.forEach((e, index) => {
-          if (index < newThumbnailsCount) {
-            const thumbnailsImg = document.createElement('img');
-
-            thumbnailsImg.src = img[index].src;
-            thumbnailsImg.dataset.index = img[index].id;
-            thumbnails.appendChild(thumbnailsImg);
-          }
-        })
-      }
-    }
-  })
-
-  const currentThumbnails = Array.from(thumbnails.children);
-
-  currentThumbnails.forEach((e) => {
-    e.addEventListener('click', () => {
-      mainImg.src = img[e.dataset.index].src;
-      mainImg.dataset.index = e.dataset.index;
-
-      removeThumbnails();
-      addThumbnails();
-    })
-  })
+    });
+  }
 }
-
-function removeThumbnails() {
-  Array.from(thumbnails.children).forEach((e) => {
-    e.remove();
-  })
-}
-
-function preloadImages() {
-  img.forEach((e) => {
-    let img = new Image();
-    img.src = e.src;
-    console.log(e.src)
-  })
-}
-
 
 

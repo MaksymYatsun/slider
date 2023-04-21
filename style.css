@@ -1,8 +1,11 @@
-main {
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+body {
+  margin: 0;
+  padding: 0;
+  background: #fff2cc;
+}
+
+.container {
+  padding: 15px;
 }
 
 .btn-reset {
@@ -12,14 +15,17 @@ main {
 }
 
 .slider {
-  display: flex;
-  height: 500px;
-  margin-bottom: 50px;
+  margin-bottom: 40px;
 }
 
-.slider img {
+.slider-main {
+  display: flex;
+  margin-bottom: 20px;
+}
+
+.main-img {
   margin: auto;
-  height: 500px;
+  width: 100%;
   border-radius: 15px;
   box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
 }
@@ -27,48 +33,102 @@ main {
 .controls {
   display: flex;
   justify-content: center;
-  margin-bottom: 50px;
+  margin-bottom: 15px;
 }
 
 .btn {
   transition: all 0.1s;
   cursor: pointer;
-  font-size: 40px;
+  width: 20%;
 }
 
 .btn:hover {
   transition: all 0.1s;
-  transform: scale(130%);
+  transform: scale(120%);
 }
 
 .btn:first-child {
-  margin-right: 20px;
+  margin-right: 50px;
+}
+
+.btn-img {
+  width: 100%;
 }
 
 .thumbnails {
   display: flex;
   justify-content: center;
-  height: 100px;
 }
 
-.thumbnails img {
-  height: 150px;
+.thumbnail-image {
+  width: calc((100% / 5) - 4px);
   border-radius: 15px;
   cursor: pointer;
   transition: all 0.1s;
-  box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+  box-shadow: rgba(0, 0, 0, 0.19) 0px 5px 10px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
 }
 
-.thumbnails img:hover {
+.thumbnail-image:not(:last-child) {
+  margin-right: 5px;
+}
+
+.thumbnail-image:hover {
   transition: all 0.1s;
-  transform: scale(110%);
-}
-
-.thumbnails img:not(:last-child) {
-  margin-right: 25px;
+  transform: scale(105%);
 }
 
 .thumbnail-active {
-  transform: scale(110%);
+  transform: scale(105%);
   transition: all 0.1s;
+}
+
+@media (min-width: 768px) {
+  .main-img {
+    width: 80%;
+    margin-bottom: 30px;
+  }
+
+  .controls {
+    margin-bottom: 30px;
+  }
+
+  .btn {
+    width: 10%;
+  }
+
+  .thumbnail-image {
+    width: calc(80% / 5);
+  }
+
+  .thumbnail-image:hover {
+    transition: all 0.1s;
+    transform: scale(110%);
+  }
+
+  .thumbnail-image:not(:last-child) {
+    margin-right: 20px;
+  }
+
+  .thumbnail-active {
+    transform: scale(110%);
+  }
+}
+
+@media (min-width: 1368px) {
+  .main-img {
+    width: auto;
+    height: 50vh;
+  }
+
+  .btn {
+    width: 5%;
+  }
+
+  .thumbnail-image:not(:last-child) {
+    margin-right: 30px;
+  }
+
+  .thumbnail-image {
+    width: calc(50% / 5);
+  }
 }
