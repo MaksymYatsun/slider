@@ -9,20 +9,21 @@ const imagesArray = [
   { id: 7, src: 'https://picsum.photos/700/500?random=8' },
 ];
 
-addSlider(imagesArray, '#slider', 5);
+addSlider('#slider', imagesArray);
 
-function addSlider(imgArr, sliderId, thumbnailsCount) {
+function addSlider(sliderId, imgArr, thumbnailsCount = 5) {
   const sliderContainer = document.querySelector(sliderId);
-  const slider = sliderContainer.querySelector('#slider-main');
-  const controls = sliderContainer.querySelector('#controls');
-  const buttonNext = controls.querySelector('#buttonNext');
-  const buttonPrev = controls.querySelector('#buttonPrev');
-  const thumbnails = sliderContainer.querySelector('#thumbnails');
+  const slider = sliderContainer.children[0];
+  const controls = sliderContainer.children[1];
+  const buttonPrev = controls.children[0];
+  const buttonNext = controls.children[1];
+  const thumbnails = sliderContainer.children[2];
 
   const mainImg = document.createElement('img');
   mainImg.classList.add('main-img');
-  mainImg.src = imgArr[0].src;
-  mainImg.dataset.index = imgArr[0].id;
+
+  updateMainImg(imgArr[0]);
+
   slider.appendChild(mainImg);
 
   addThumbnails();
@@ -38,11 +39,9 @@ function addSlider(imgArr, sliderId, thumbnailsCount) {
     const currentIndex = parseInt(mainImg.dataset.index);
 
     if (currentIndex + 1 > imgArr.length - 1) {
-      mainImg.src = imgArr[0].src;
-      mainImg.dataset.index = imgArr[0].id;
+      updateMainImg(imgArr[0])
     } else {
-      mainImg.src = imgArr[currentIndex + 1].src;
-      mainImg.dataset.index = imgArr[currentIndex + 1].id;
+      updateMainImg(imgArr[currentIndex + 1]);
     }
 
     addThumbnails();
@@ -52,11 +51,9 @@ function addSlider(imgArr, sliderId, thumbnailsCount) {
     const currentIndex = parseInt(mainImg.dataset.index);
 
     if (currentIndex - 1 < 0) {
-      mainImg.src = imgArr[imgArr.length - 1].src;
-      mainImg.dataset.index = imgArr[imgArr.length - 1].id;
+      updateMainImg(imgArr[imgArr.length - 1]);
     } else {
-      mainImg.src = imgArr[currentIndex - 1].src;
-      mainImg.dataset.index = imgArr[currentIndex - 1].id;
+      updateMainImg(imgArr[currentIndex - 1]);
     }
 
     addThumbnails();
@@ -67,26 +64,27 @@ function addSlider(imgArr, sliderId, thumbnailsCount) {
 
     if (e.key === 'ArrowRight') {
       if (currentIndex + 1 > imgArr.length - 1) {
-        mainImg.src = imgArr[0].src;
-        mainImg.dataset.index = imgArr[0].id;
+        updateMainImg(imgArr[0]);
       } else {
-        mainImg.src = imgArr[currentIndex + 1].src;
-        mainImg.dataset.index = imgArr[currentIndex + 1].id;
+        updateMainImg(imgArr[currentIndex + 1]);
       }
     }
 
     if (e.key === 'ArrowLeft') {
       if (currentIndex - 1 < 0) {
-        mainImg.src = imgArr[imgArr.length - 1].src;
-        mainImg.dataset.index = imgArr[imgArr.length - 1].id;
+        updateMainImg(imgArr[imgArr.length - 1]);
       } else {
-        mainImg.src = imgArr[currentIndex - 1].src;
-        mainImg.dataset.index = imgArr[currentIndex - 1].id;
+        updateMainImg(imgArr[currentIndex - 1]);
       }
     }
 
     addThumbnails();
   });
+
+  function updateMainImg(img) {
+    mainImg.src = img.src;
+    mainImg.dataset.index = img.id;
+  }
 
   function addThumbnails() {
     Array.from(thumbnails.children).forEach((e) => {
@@ -94,17 +92,13 @@ function addSlider(imgArr, sliderId, thumbnailsCount) {
     })
 
     const staringIndex = parseInt(mainImg.dataset.index);
-
     const newThumbnailsArr = imgArr.slice(staringIndex, staringIndex + thumbnailsCount);
-    let restThumbnailsArr = [];
 
     if (newThumbnailsArr.length < thumbnailsCount) {
-      restThumbnailsArr = imgArr.slice(0, thumbnailsCount - newThumbnailsArr.length);
+      newThumbnailsArr.push(...imgArr.slice(0, thumbnailsCount - newThumbnailsArr.length));
     }
 
-    const finalThumbnails = [...newThumbnailsArr, ...restThumbnailsArr];
-
-    finalThumbnails.forEach((e, index) => {
+    newThumbnailsArr.forEach((e, index) => {
       const thumbnailsImg = document.createElement('img');
 
       if (index === 0) {
@@ -112,8 +106,8 @@ function addSlider(imgArr, sliderId, thumbnailsCount) {
       }
 
       thumbnailsImg.classList.add('thumbnail-image');
-      thumbnailsImg.src = finalThumbnails[index].src;
-      thumbnailsImg.dataset.index = finalThumbnails[index].id;
+      thumbnailsImg.src = newThumbnailsArr[index].src;
+      thumbnailsImg.dataset.index = newThumbnailsArr[index].id;
       thumbnails.appendChild(thumbnailsImg);
     });
   }
