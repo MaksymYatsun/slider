@@ -12,7 +12,7 @@ const imagesArray = [
 addSlider('slider', imagesArray);
 
 function addSlider(sliderId, imgArr, thumbnailsCount = 5) {
-  const sliderContainer = document.querySelector(`#${sliderId}`);
+  const sliderContainer = document.getElementById(sliderId);
   const slider = sliderContainer.querySelector('.slider-main');
   const controls = sliderContainer.querySelector('.controls');
   const buttonPrev = controls.querySelector('.btn-prev');
