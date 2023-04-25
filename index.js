@@ -13,11 +13,11 @@ addSlider('slider', imagesArray);
 
 function addSlider(sliderId, imgArr, thumbnailsCount = 5) {
   const sliderContainer = document.querySelector(`#${sliderId}`);
-  const slider = sliderContainer.children[0];
-  const controls = sliderContainer.children[1];
-  const buttonPrev = controls.children[0];
-  const buttonNext = controls.children[1];
-  const thumbnails = sliderContainer.children[2];
+  const slider = sliderContainer.querySelector('.slider-main');
+  const controls = sliderContainer.querySelector('.controls');
+  const buttonPrev = controls.querySelector('.btn-prev');
+  const buttonNext = controls.querySelector('.btn-next');
+  const thumbnails = sliderContainer.querySelector('.thumbnails');
 
   const mainImg = document.createElement('img');
   mainImg.classList.add('main-img');
@@ -43,7 +43,7 @@ function addSlider(sliderId, imgArr, thumbnailsCount = 5) {
     }
 
     addThumbnails();
-  })
+  });
 
   buttonPrev.addEventListener('click', () => {
     const currentIndex = parseInt(mainImg.dataset.index);
@@ -55,7 +55,7 @@ function addSlider(sliderId, imgArr, thumbnailsCount = 5) {
     }
 
     addThumbnails();
-  })
+  });
 
   document.addEventListener('keydown', e => {
     const currentIndex = parseInt(mainImg.dataset.index);
