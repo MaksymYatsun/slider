@@ -9,10 +9,10 @@ const imagesArray = [
   { id: 7, src: 'https://picsum.photos/700/500?random=8' },
 ];
 
-addSlider('#slider', imagesArray);
+addSlider('slider', imagesArray);
 
 function addSlider(sliderId, imgArr, thumbnailsCount = 5) {
-  const sliderContainer = document.querySelector(sliderId);
+  const sliderContainer = document.querySelector(`#${sliderId}`);
   const slider = sliderContainer.children[0];
   const controls = sliderContainer.children[1];
   const buttonPrev = controls.children[0];
@@ -29,9 +29,7 @@ function addSlider(sliderId, imgArr, thumbnailsCount = 5) {
   addThumbnails();
 
   thumbnails.addEventListener('click', (e) => {
-    mainImg.src = imgArr[e.target.dataset.index].src;
-    mainImg.dataset.index = e.target.dataset.index;
-
+    updateMainImg(imgArr[e.target.dataset.index]);
     addThumbnails();
   });
 
@@ -84,12 +82,13 @@ function addSlider(sliderId, imgArr, thumbnailsCount = 5) {
   function updateMainImg(img) {
     mainImg.src = img.src;
     mainImg.dataset.index = img.id;
+    document.body.style.backgroundImage = (`url(${img.src})`)
   }
 
   function addThumbnails() {
     Array.from(thumbnails.children).forEach((e) => {
       e.remove();
-    })
+    });
 
     const staringIndex = parseInt(mainImg.dataset.index);
     const newThumbnailsArr = imgArr.slice(staringIndex, staringIndex + thumbnailsCount);

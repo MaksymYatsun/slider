@@ -2,9 +2,15 @@ body {
   margin: 0;
   padding: 0;
   background: #fff2cc;
+  height: 100vh;
+  background-repeat: no-repeat;
+  background-size: cover;
+  backdrop-filter: blur(40px);
+  transition: all 0.3s;
 }
 
 .container {
+  padding-top: 50px;
   padding: 15px;
 }
 
